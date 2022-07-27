@@ -1,10 +1,16 @@
 import './app.css'
+import Header from './components/Header'
+import MenuBar from './components/MenuBar'
 
 export function App() {
 
   return (
     <>
-      <h1><span class='text-red-400 italic font-bold'>AVALANCHE</span> Team Management System</h1>
+      <Header />
+        <div id='wrapper' class='flex-1'>
+          haahaha
+        </div>
+      <MenuBar />
     </>
   )
 }
