@@ -9,7 +9,7 @@ function MenuBar() {
   const context = useContext(StateContext)
 
   return (
-    <div class={`fixed bottom-0 flex items-center justify-around w-full h-14 px-2 rounded-t-2xl shadow-inner ${context.dark && 'bg-[#1a1a1a]'}`}>
+    <div class={`fixed bottom-0 flex items-center justify-around w-full h-14 px-2 rounded-t-3xl shadow-inner ${context.dark && 'bg-[#1a1a1a]'}`}>
         <Link href='/calendar'>
             <div class={`flex-1 flex justify-center items-center h-full text-2xl ${context.dark ? 'text-[#fafafa]' : 'text-[#242424]'} active:text-theme`}>
                 <span class='mx-4 my-2'><AiOutlineCalendar /></span>
