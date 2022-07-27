@@ -1,32 +1,26 @@
+import { BsPerson } from 'react-icons/bs';
+import { AiOutlineCalendar } from 'react-icons/ai';
+import { FiMusic } from 'react-icons/fi';
+import { Link } from 'preact-router';
+
 function MenuBar() {
   return (
-    <div class="fixed bottom-0 flex items-center justify-around w-full h-14 shadow-sm py-3 px-2">
-        <div class="px-4 py-1 text-xl text-gray-600">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-        </div>
-        <div class="px-4 py-1 text-xl text-gray-600">
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xmlSpace="preserve">
-                <g>
-                    <g>
-                        <path d="M447.123,152.107c-6.42-6.42-16.83-6.42-23.251,0l-31.036,31.036l-1.53-1.53c-6.42-6.422-16.83-6.42-23.251,0
-                            c-6.421,6.421-6.421,16.83,0,23.251l1.53,1.53L248.013,327.966V133.354c0-9.08-7.361-16.441-16.441-16.441
-                            s-16.441,7.361-16.441,16.441v218.453H109.311L140.075,118.4c0.09-0.68,0.417-1.313,0.916-1.781l89.047-83.17
-                            c0.86-0.803,2.209-0.801,3.067-0.001l89.048,83.172c0.502,0.468,0.828,1.1,0.917,1.781l5.633,42.733
-                            c1.186,9.002,9.435,15.344,18.448,14.152c9.002-1.186,15.339-9.446,14.152-18.448l-5.633-42.732
-                            c-1.082-8.218-5.015-15.86-11.074-21.517L255.549,9.416c-13.446-12.553-34.508-12.557-47.954,0.001l-89.05,83.172
-                            c-6.056,5.658-9.988,13.3-11.07,21.515L60.373,471.465C57.544,492.938,74.28,512,95.917,512h271.311
-                            c21.661,0,38.373-19.087,35.544-40.535l-22.349-169.565c-1.185-9.002-9.436-15.339-18.448-14.152
-                            c-9.002,1.186-15.339,9.446-14.152,18.448l6.012,45.611h-83.159l122.161-122.162l1.531,1.531c6.419,6.421,16.829,6.422,23.251,0
-                            c6.421-6.421,6.421-16.83,0-23.251l-1.531-1.531l31.036-31.036C453.544,168.938,453.544,158.528,447.123,152.107z
-                            M358.167,384.689l12.004,91.074c0.112,0.846-0.148,1.701-0.708,2.341c-0.566,0.645-1.38,1.014-2.235,1.014H95.917
-                            c-0.855,0-1.668-0.369-2.231-1.011c-0.564-0.643-0.824-1.499-0.712-2.347l12.003-91.072H358.167z"/>
-                    </g>
-                </g>
-            </svg>
-        </div>
+    <div class="fixed bottom-0 flex items-center justify-around w-full h-14 px-2 rounded-t-2xl shadow-inner">
+        <Link href='/calendar'>
+            <div class="flex-1 flex justify-center items-center h-full  text-2xl text-[#242424] active:text-theme">
+                <AiOutlineCalendar className='mx-4 my-2' />
+            </div>
+        </Link>
+        <Link href='/music'>
+            <div class="flex-1 flex justify-center items-center h-full  text-2xl text-[#242424] active:text-theme">
+                <FiMusic className='mx-4 my-2' />
+            </div>
+        </Link>
+        <Link href='/account'>
+            <div class="flex-1 flex justify-center items-center h-full  text-2xl text-[#242424] active:text-theme">
+                <BsPerson className='mx-4 my-2' />
+            </div>
+        </Link>
     </div>
   )
 }
