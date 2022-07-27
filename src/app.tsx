@@ -1,14 +1,14 @@
 import './app.css'
 import Router, { route } from 'preact-router'
+import Calendar from './pages/Calendar';
+import Profile from './pages/Profile';
+import Music from './pages/Music';
 import Header from './components/Header'
 import MenuBar from './components/MenuBar'
-import Profile from './components/Profile';
-import Music from './components/Music';
-import Calendar from './components/Calendar';
 
 export function App() {
   const isAuthenticated = () =>{
-    return false;
+    return true;
   }
 
   const handleRoute = async(e: any) => {
