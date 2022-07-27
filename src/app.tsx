@@ -5,11 +5,22 @@ import Profile from './pages/Profile';
 import Music from './pages/Music';
 import Header from './components/Header'
 import MenuBar from './components/MenuBar'
+import { createContext } from 'preact';
+import { useEffect, useState } from 'preact/hooks';
+
+type ContextType = {
+  dark: boolean;
+  setDark: Function;
+}
+export const StateContext =  createContext<ContextType>({dark: false, setDark: () => {}});
 
 export function App() {
+  const [dark, setDark] = useState(false)
   const isAuthenticated = () =>{
     return true;
   }
+
+  const sharedValue = {dark, setDark}
 
   const handleRoute = async(e: any) => {
     switch (e.url) {
@@ -20,8 +31,15 @@ export function App() {
     }
   };
 
+  
+  useEffect(() => {
+    if (window.matchMedia && !window.matchMedia('(prefers-color-scheme: dark)').matches) return;
+    setDark(true)
+  }, [])
+
+
   return (
-    <>
+    <StateContext.Provider value={sharedValue}>
       <Header />
         <Router onChange={handleRoute}>
           <Profile path="/" />
@@ -29,6 +47,6 @@ export function App() {
           <Calendar path="/calendar" />
         </Router>
       <MenuBar />
-    </>
+    </StateContext.Provider>
   )
 }
