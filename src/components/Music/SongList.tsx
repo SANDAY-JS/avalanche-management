@@ -1,5 +1,4 @@
 import MetronomeIcon from './MetronomeIcon';
-import Metronome from "./Metronome";
 import { useContext, useEffect, useState } from 'preact/hooks';
 import { StateContext } from '../../app';
 

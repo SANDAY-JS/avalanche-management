@@ -1,5 +1,4 @@
 import { useState } from "preact/hooks";
-import "./metronome.css";
 
 type Props  = {
   heyPlay?: boolean;
@@ -45,7 +44,7 @@ function Metronome({heyPlay, heyCount, heyBpm, heyBeatsPerMeasure}: Props) {
   };
 
   return (
-    <div onClick={startStop} className="metronome" />
+    <div onClick={startStop} />
   );
 }
 
