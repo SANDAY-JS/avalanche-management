@@ -13,7 +13,7 @@ function MenuBar() {
   const menuItemStyle = `relative flex-1 flex justify-center items-center h-full text-2xl ${context.dark ? 'text-[#fafafa]' : 'text-[#242424]'} active:text-theme`
 
   return (
-    <div class={`fixed bottom-[3rem] flex items-center justify-around w-full h-14 px-2 rounded-t-3xl shadow-inner ${context.dark && 'bg-[#1a1a1a]'}`}>
+    <div class={`fixed bottom-0 flex items-center justify-around w-full h-14 px-2 rounded-t-3xl shadow-inner ${context.dark && 'bg-[#1a1a1a]'}`}>
         <Link href='/calendar'>
             <div class={`${menuItemStyle}`}>
                 {currentPath === '/calendar' && <span class='absolute bottom-0 w-1/5 left-3/5 h-[2px] bg-black' />}
