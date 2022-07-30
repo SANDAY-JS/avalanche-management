@@ -22,10 +22,11 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
   const [beatsPerMeasure, setBeatsPerMeasure] = useState(4)
 
   const playClick = () => {
-    console.log('Playing', id)
     if (count % beatsPerMeasure === 0) {
+      console.log('id click1', id)
       click2.play();
     } else {
+      console.log('id click2', id)
       click1.play();
     }
     // keep track of which beat we're on
@@ -34,8 +35,7 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
 
   const startStop = () => {
     if (isPlaying) {
-      clearInterval(timer);
-      setIsPlaying(false);
+      stopSong()
     } else {
       setTimer(setInterval(playClick, (60 / bpm) * 1000));
       setIsPlaying(true)
@@ -43,6 +43,11 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
       playClick()
     }
   };
+
+  const stopSong = () => {
+    clearInterval(timer);
+    setIsPlaying(false);
+  }
 
   const changeCurrentSong = () => {
     startStop()
@@ -60,6 +65,13 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
     click1.pause()
     click2.pause()
   }, [isPlaying, currentSong])
+
+  useEffect(() => {
+    if(currentSong === undefined || currentSong === id) return;
+    if(isPlaying) {
+      stopSong()
+    }
+  }, [currentSong])
 
   return (
     <div class='flex flex-col items-center gap-3 px-6 py-2 shadow-lg w-full rounded-lg'>
