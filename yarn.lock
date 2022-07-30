@@ -932,6 +932,11 @@ react-icons@^4.4.0:
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.4.0.tgz#a13a8a20c254854e1ec9aecef28a95cdf24ef703"
   integrity sha512-fSbvHeVYo/B5/L4VhB7sBA1i2tS8MkT0Hb9t2H1AVPkwGfVHLJCqyr2Py9dKMxsyM63Eng1GkdZfbWj+Fmv8Rg==
 
+react-top-loading-bar@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-top-loading-bar/-/react-top-loading-bar-2.1.0.tgz#61198174e734606056f64262da312c02414b6f36"
+  integrity sha512-07IPCC4fThfkH5PHm7d49s9UAq2rpy4RAyD+5gtwtBbBrwxkvcff7ZlbCgzrBXq8AvcGafDkpjcGdntJ4F0O9A==
+
 read-cache@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/read-cache/-/read-cache-1.0.0.tgz#e664ef31161166c9751cdbe8dbcf86b5fb58f774"
