@@ -1,4 +1,5 @@
 import { useState } from "preact/hooks"
+import SearchSong from "../../components/Music/SearchSong"
 import Song from "../../components/Music/SongList"
 
 type Props = {
@@ -15,10 +16,10 @@ function Music({path}: Props) {
 
   return (
     <div class="flex flex-col items-center gap-5 flex-grow w-5/6 mx-auto py-6">
-      <h2 class="text-lg underline text-left w-full italic">Song List</h2>
-      {/* <form>
-        <input type="text" class="outline-none shadow-sm rounded-sm" placeholder="検索" />
-      </form> */}
+      <div className="flex gap-3 justify-between items-center w-full">
+        <h2 class="text-lg underline text-left italic">Song List</h2>
+        <SearchSong />
+      </div>
 
       <div className="flex-1 w-full flex flex-col items-center gap-4">
         {testData.map((song, i) => (

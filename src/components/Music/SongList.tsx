@@ -9,7 +9,6 @@ type Props = {
   setCurrentSong: Function
 }
 
-
 const click1 = new Audio('https://daveceddia.com/freebies/react-metronome/click1.wav');
 const click2 = new Audio('https://daveceddia.com/freebies/react-metronome/click2.wav');
 
@@ -61,12 +60,12 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
   useEffect(() => {
     if(currentSong === undefined) return;
     if(isPlaying && currentSong === id || !isPlaying) return;
-    console.log('stoppng', id)
     click1.pause()
     click2.pause()
   }, [isPlaying, currentSong])
 
   useEffect(() => {
+    // @dev When the currentSong has changed to other song
     if(currentSong === undefined || currentSong === id) return;
     if(!isPlaying) return;
     stopSong()
@@ -80,12 +79,8 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
           <p><span class="font-semibold">{song.bpm}</span> bpm（{song.time_signature}）</p>
           <p>{song.length} 分</p>
         </div>
-        {/* <span class="h-12 w-[2px] bg-slate-400 mr-5 " /> */}
         <div onClick={changeCurrentSong} class={`relative w-7 h-7 ${context.dark && 'fill-[#fafafa]'} ${isPlaying && 'fill-theme'}`}>
           <MetronomeIcon />
-          <div className="absolute -top-2 w-auto h-12">
-            {/* <Metronome heyBpm={song.bpm} /> */}
-          </div>
         </div>
       </div>
     </div>
