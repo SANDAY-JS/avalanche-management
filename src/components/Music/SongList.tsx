@@ -60,7 +60,7 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
 
   useEffect(() => {
     if(currentSong === undefined) return;
-    if(isPlaying && currentSong === id) return;
+    if(isPlaying && currentSong === id || !isPlaying) return;
     console.log('stoppng', id)
     click1.pause()
     click2.pause()
@@ -68,9 +68,8 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
 
   useEffect(() => {
     if(currentSong === undefined || currentSong === id) return;
-    if(isPlaying) {
-      stopSong()
-    }
+    if(!isPlaying) return;
+    stopSong()
   }, [currentSong])
 
   return (
