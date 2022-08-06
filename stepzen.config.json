@@ -1,0 +1,4 @@
+{
+  "endpoint": "api/toned-kudu",
+  "root": "src/stepzen"
+}

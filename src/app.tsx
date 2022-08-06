@@ -7,6 +7,7 @@ import Header from './components/Header'
 import MenuBar from './components/MenuBar'
 import { createContext } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { useQuery, gql } from '@apollo/client';
 
 type ContextType = {
   dark: boolean;
