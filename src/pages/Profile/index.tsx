@@ -1,5 +1,6 @@
 import { supabase } from '../../supabaseClient'
 import { useState, useEffect } from 'preact/hooks'
+import Avatar from '../../components/users/Avatar'
 
 type Props = {
   path: string
@@ -10,7 +11,7 @@ function Profile({path, session}: Props) {
   const [loading, setLoading] = useState(true)
   const [username, setUsername] = useState(null)
   const [website, setWebsite] = useState(null)
-  const [avatar_url, setAvatarUrl] = useState(null)
+  const [avatar_url, setAvatarUrl] = useState<string | null>(null)
 
   useEffect(() => {
     getProfile()
@@ -46,7 +47,7 @@ function Profile({path, session}: Props) {
     }
   }
 
-  const updateProfile = async (e: Event) => {
+  const updateProfile = async (e: any) => {
     e.preventDefault()
 
     try {
@@ -82,6 +83,14 @@ function Profile({path, session}: Props) {
           'Saving ...'
         ) : (
           <form onSubmit={updateProfile} className="form-widget">
+            <Avatar
+              url={avatar_url}
+              size={150}
+              onUpload={(url: string) => {
+                setAvatarUrl(url)
+                updateProfile({ username, website, avatar_url: url })
+              }}
+            />
             <div>Email: {session.user.email}</div>
             <div>
               <label htmlFor="username">Name</label>
