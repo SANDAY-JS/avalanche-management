@@ -8,6 +8,7 @@ type Props = {
 export default function Auth({}: Props) {
   const [loading, setLoading] = useState<boolean>(false)
   const [email, setEmail] = useState<string>('')
+  const [success, setSuccess] = useState<string>('')
 
   const handleLogin = async (e: Event) => {
     e.preventDefault()
@@ -16,7 +17,7 @@ export default function Auth({}: Props) {
       setLoading(true)
       const { error } = await supabase.auth.signIn({ email })
       if (error) throw error
-      alert('Check your email for the login link!')
+      setSuccess('メールアドレスにログイン用URLを送信しました。')
     } catch (error: any) {
       alert(error.error_description || error.message)
     } finally {
@@ -25,27 +26,28 @@ export default function Auth({}: Props) {
   }
 
   return (
-    <div className="row flex flex-center">
-      <div className="col-6 form-widget" aria-live="polite">
-        <h1 className="header">AVALANCHEログイン</h1>
-        <p className="description">メールアドレスでサインイン</p>
+    <div className="row flex flex-center w-full py-8 px-2">
+      <div className="flex flex-col items-center gap-4 w-full" aria-live="polite">
+        <h1 className="text-xl font-bold italic">ログイン</h1>
         {loading ? (
           '送信中'
         ) : (
-          <form onSubmit={handleLogin}>
-            <label htmlFor="email">メールアドレス</label>
-            <input
-              id="email"
-              className="inputField"
-              type="email"
-              placeholder="Your email"
-              value={email}
-              onChange={(e:any) => setEmail(e.target.value)}
-            />
-            <button className="button block" aria-live="polite">
-              送信
-            </button>
-          </form>
+          !success ? 
+            <form onSubmit={handleLogin}>
+              <label htmlFor="email">メールアドレス</label>
+              <input
+                id="email"
+                className="inputField"
+                type="email"
+                placeholder="Your email"
+                value={email}
+                onChange={(e:any) => setEmail(e.target.value)}
+              />
+              <button className="block w-full text-center" aria-live="polite">
+                送信
+              </button>
+            </form> : 
+          <p class='text-green-500 text-xl text-center w-4/5 mx-auto'>{success}</p>
         )}
       </div>
     </div>

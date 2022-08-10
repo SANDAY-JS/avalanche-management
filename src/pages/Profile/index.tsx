@@ -28,15 +28,18 @@ function Profile({path, session}: Props) {
         .single()
 
       if (error && status !== 406) {
+        console.log(error.message)
         throw error
       }
 
       if (data) {
+        console.log('data>>', data)
         setUsername(data.username)
         setWebsite(data.website)
         setAvatarUrl(data.avatar_url)
       }
     } catch (error:any) {
+      console.log('This is it', error)
       alert(error.message)
     } finally {
       setLoading(false)
