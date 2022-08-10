@@ -1,5 +1,5 @@
 import './app.css'
-import Router, { route } from 'preact-router'
+import Router from 'preact-router'
 import Calendar from './pages/Calendar';
 import Profile from './pages/Profile';
 import Music from './pages/Music';
@@ -7,7 +7,8 @@ import Header from './components/Header'
 import MenuBar from './components/MenuBar'
 import { createContext } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import { useQuery, gql } from '@apollo/client';
+import Auth from './pages/Auth';
+import { supabase } from './supabaseClient';
 
 type ContextType = {
   dark: boolean;
@@ -16,6 +17,7 @@ type ContextType = {
 export const StateContext =  createContext<ContextType>({dark: false, setDark: () => {}});
 
 export function App() {
+  const [session, setSession] = useState<any>(null)
   const [dark, setDark] = useState(false)
   const isAuthenticated = () =>{
     return true;
@@ -24,12 +26,12 @@ export function App() {
   const sharedValue = {dark, setDark}
 
   const handleRoute = async(e: any) => {
-    switch (e.url) {
-      case '/profile':
-        const isAuthed = await isAuthenticated();
-        if (!isAuthed) route('/login', true);
-        break;
-    }
+    // switch (e.url) {
+    //   case '/':
+    //     const isAuthed = await isAuthenticated();
+    //     if (!isAuthed) route('/', true);
+    //     break;
+    // }
   };
 
   
@@ -38,12 +40,20 @@ export function App() {
     setDark(true)
   }, [])
 
+  useEffect(() => {
+    setSession(supabase.auth.session())
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+  }, [])
+
 
   return (
     <StateContext.Provider value={sharedValue}>
       <Header />
         <Router onChange={handleRoute}>
-          <Profile path="/" />
+          {!session ? <Auth path='/' /> : <Profile path='/' key={session.user.id} session={session} />}
           <Music path="/music" />
           <Calendar path="/calendar" />
         </Router>
