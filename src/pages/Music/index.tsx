@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks"
-import SearchSong from "../../components/Music/SearchSong"
+// import SearchSong from "../../components/Music/SearchSong"
 import Song from "../../components/Music/SongList"
 
 type Props = {
