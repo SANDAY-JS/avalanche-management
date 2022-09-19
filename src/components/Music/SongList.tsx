@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'preact/hooks';
 import { BsFillPlayFill } from 'react-icons/bs';
+import { getSong } from '../../../lib/firebase';
 import { StateContext } from '../../app';
 import MetronomeIcon from './MetronomeIcon';
 import PlayBox from './PlayBox';
@@ -13,6 +14,8 @@ type Props = {
 
 function Song({song, id, currentSong, setCurrentSong}: Props) {
   const firstUpdate = useRef(true);
+  const audioRef = useRef(null)
+  
   const context = useContext(StateContext)
   const [bpm, setBpm] = useState(song.bpm)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -24,11 +27,10 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
       return;
     }
 
-    if(isPlaying) {
-      song.audio.play();
+    if(isPlaying && audioRef.current) {
+      getSong(song.audio, audioRef.current)
       return;
     }
-    song.audio.pause();
   }, [isPlaying])
 
   return (
@@ -47,6 +49,11 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
         </div>
         {metronomeOpen && <PlayBox setter={setMetronomeOpen} bpm={bpm} />}
       </div>
+      {isPlaying && (
+        <figure class='m-0 absolute bottom-12 left-1/2 transform -translate-x-1/2'>
+          <audio controls autoPlay ref={audioRef} src="" />
+        </figure>
+      )}
     </div>
   )
 }

@@ -6,8 +6,8 @@ type Props = {
   path: string
 }
 const testData: Song[] = [
-  {name: 'さがしもの', bpm: 80, time_signature: '1/4', length: 4.5, audio: '../../assets/Holiday.mp3'},
-  {name: 'Hero', bpm: 148, time_signature: '2/4', length: 4, audio: '../../assets/Holiday.mp3'},
+  {name: 'さがしもの', bpm: 80, time_signature: '1/4', length: 4.5, audio: 'Holiday.mp3'},
+  {name: 'Hero', bpm: 148, time_signature: '2/4', length: 4, audio: 'Holiday.mp3'},
 ]
 
 function Music({path}: Props) {
