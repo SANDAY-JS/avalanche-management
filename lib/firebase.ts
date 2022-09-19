@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import {getStorage, ref, getDownloadURL} from 'firebase/storage'
+import {getDocs, addDoc, collection, getFirestore} from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: "AIzaSyBdzUk_UXYWRKBUqGPU4kiDRmPsZXBu5wY",
@@ -10,27 +11,44 @@ const firebaseConfig = {
   appId: "669576973482"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app)
+const db = getFirestore(app);
 
 const getSong = (path: string, audioEl: HTMLElement) => {
   getDownloadURL(ref(storage, path))
       .then((url) => {
-          // const xhr = new XMLHttpRequest();
-          // xhr.responseType = 'blob';
-          // xhr.onload = (event) => {
-          //     const blob = xhr.response;
-          // };
-          // xhr.open('GET', url);
-          // xhr.send();
           audioEl.setAttribute('src', url);
-          console.log('url', url)
       })
       .catch((error) => {
           console.error(error);
       });
 }
 
+const uploadSongFile = () => {
 
-export {app, storage, ref, getDownloadURL, getSong};
+}
+
+const uploadSongData = async (data: Song) => {
+  try {
+    const docRef = await addDoc(collection(db, 'songs'), data);
+    console.log(docRef.id)
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const getSongData = async (setter: Function) => {
+  const result: any[] = []
+  try {
+    await getDocs(collection(db, 'songs')).then((querySnapshot) => {
+      querySnapshot.docs.forEach((doc) => result.push(doc.data()))
+      setter(result)
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+export { app, storage, ref, getDownloadURL, getSong, uploadSongFile, uploadSongData, getSongData };

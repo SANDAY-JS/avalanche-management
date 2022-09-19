@@ -7,6 +7,7 @@ import Header from './components/Header'
 import MenuBar from './components/MenuBar'
 import { createContext } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { getSongData } from '../lib/firebase';
 
 type ContextType = {
   dark: boolean;
@@ -15,17 +16,18 @@ type ContextType = {
 export const StateContext =  createContext<ContextType>({dark: false, setDark: () => {}});
 
 export function App() {
+  const [songs, setSongs] = useState<Song[]>([])
   const [dark, setDark] = useState(false)
   const isAuthenticated = () =>{
     return true;
   }
 
-  const sharedValue = {dark, setDark}
+  const sharedValue = {dark, setDark, songs, setSongs}
 
-  const handleRoute = async(e: any) => {
+  const handleRoute = (e: any) => {
     switch (e.url) {
       case '/profile':
-        const isAuthed = await isAuthenticated();
+        const isAuthed = isAuthenticated();
         if (!isAuthed) route('/login', true);
         break;
     }
@@ -33,9 +35,15 @@ export function App() {
 
   
   useEffect(() => {
+    getSongData(setSongs);
+
     if (window.matchMedia && !window.matchMedia('(prefers-color-scheme: dark)').matches) return;
     setDark(true)
   }, [])
+
+  useEffect(() => {
+    console.log(songs)
+  }, [songs])
 
 
   return (
