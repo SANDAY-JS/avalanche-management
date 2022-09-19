@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@kevinorriss/react-metronome": "^2.0.1",
     "preact": "^10.9.0",
     "preact-router": "^4.1.0",
     "react-icons": "^4.4.0",
