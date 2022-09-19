@@ -1,4 +1,5 @@
-import { useContext, useState } from 'preact/hooks';
+import { useContext, useEffect, useRef, useState } from 'preact/hooks';
+import { BsFillPlayFill } from 'react-icons/bs';
 import { StateContext } from '../../app';
 import MetronomeIcon from './MetronomeIcon';
 import PlayBox from './PlayBox';
@@ -11,10 +12,24 @@ type Props = {
 }
 
 function Song({song, id, currentSong, setCurrentSong}: Props) {
+  const firstUpdate = useRef(true);
   const context = useContext(StateContext)
-  const [isPlaying, setIsPlaying] = useState(false)
   const [bpm, setBpm] = useState(song.bpm)
+  const [isPlaying, setIsPlaying] = useState(false)
   const [metronomeOpen, setMetronomeOpen] = useState(false)
+
+  useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+
+    if(isPlaying) {
+      song.audio.play();
+      return;
+    }
+    song.audio.pause();
+  }, [isPlaying])
 
   return (
     <div class='flex flex-col items-center gap-3 px-6 py-2 shadow-lg w-full rounded-lg'>
@@ -24,7 +39,10 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
           <p><span class="font-semibold">{song.bpm}</span> bpm（{song.time_signature}）</p>
           <p>{song.length} 分</p>
         </div>
-        <div onClick={() => setMetronomeOpen(!metronomeOpen)} class={`relative w-7 h-7 ${context.dark && 'fill-[#fafafa]'} ${isPlaying && 'fill-theme'}`}>
+        <div onClick={() => setIsPlaying(!isPlaying)} class={`relative text-3xl ${context.dark && 'fill-[#fafafa]'} ${isPlaying && 'text-theme'}`}>
+          <BsFillPlayFill />
+        </div>
+        <div onClick={() => setMetronomeOpen(!metronomeOpen)} class={`relative w-7 h-7 ${context.dark && 'fill-[#fafafa]'} ${metronomeOpen && 'fill-theme'}`}>
           <MetronomeIcon />
         </div>
         {metronomeOpen && <PlayBox setter={setMetronomeOpen} bpm={bpm} />}
