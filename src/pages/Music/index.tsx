@@ -18,7 +18,7 @@ function Music({path}: Props) {
     <div class="flex flex-col items-center gap-5 flex-grow w-5/6 mx-auto py-6">
       <div className="flex gap-3 justify-between items-center w-full">
         <h2 class="text-lg underline text-left italic">Song List</h2>
-        <SearchSong />
+        {/* <SearchSong /> */}
       </div>
 
       <div className="flex-1 w-full flex flex-col items-center gap-4">
