@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@kevinorriss/react-metronome": "^2.0.1",
+    "firebase": "^9.10.0",
     "preact": "^10.9.0",
     "preact-router": "^4.1.0",
+    "react-hot-toast": "^2.4.0",
     "react-icons": "^4.4.0",
     "react-top-loading-bar": "^2.1.0"
   },

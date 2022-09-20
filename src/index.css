@@ -59,6 +59,14 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+.icon {
+  @apply fill-[#242424] dark:fill-[#fafafa];
+}
+.icon svg,
+.icon path,
+.icon polyline {
+  @apply fill-[#242424] dark:fill-[#fafafa];
+}
 
 @media (prefers-color-scheme: light) {
   :root {
