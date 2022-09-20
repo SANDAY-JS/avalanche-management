@@ -18,7 +18,7 @@ const db = getFirestore(app);
 
 const getSong = (path: string, audioEl: HTMLElement) => {
   // Play Song
-  getDownloadURL(ref(storage, path))
+  getDownloadURL(ref(storage, `songs/${path}`))
       .then((url) => {
           audioEl.setAttribute('src', url);
       })
