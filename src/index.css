@@ -62,6 +62,7 @@ button:focus-visible {
 .icon {
   @apply fill-[#242424] dark:fill-[#fafafa];
 }
+.icon svg,
 .icon path,
 .icon polyline {
   @apply fill-[#242424] dark:fill-[#fafafa];

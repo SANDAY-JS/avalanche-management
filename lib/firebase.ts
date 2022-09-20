@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
+import { getStorage, ref, getDownloadURL, uploadBytesResumable, deleteObject } from 'firebase/storage'
 import { getDocs, addDoc, collection, doc, getFirestore, deleteDoc, query, where } from 'firebase/firestore'
 import { ToastType } from "../src/types/global";
 
@@ -91,7 +91,16 @@ const deleteSongData = async (docId: string, onComplete?: Function) => {
     const q = query(collection(db, 'songs'), where("id", "==", docId))
     const querySnapshot = await getDocs(q);
     const id = querySnapshot.docs.map((doc:any) => doc.id)[0];
-    // const audioPath = querySnapshot.docs.map((doc:any) => doc.data())[0].audio_path;
+    
+    const audioPath = querySnapshot.docs.map((doc:any) => doc.data())[0].audio_path;
+    const desertRef = ref(storage, `songs/${audioPath}`);
+
+    await deleteObject(desertRef)
+      .then(() => {
+        console.log('deleted a file')
+      }).catch((error) => {
+        console.error(`cannot remove a file ${audioPath}`, error);
+      });
 
     await deleteDoc(doc(db, "songs", id))
       .then(() => {
