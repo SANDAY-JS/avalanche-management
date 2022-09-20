@@ -10,5 +10,6 @@ declare global {
         time_signature: TimeSignatureType;
         length: number;
         audio_path: string;
+        id: string;
     }
 }

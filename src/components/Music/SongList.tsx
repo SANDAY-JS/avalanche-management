@@ -1,5 +1,7 @@
+import { route,  } from 'preact-router';
 import { useContext, useEffect, useRef, useState } from 'preact/hooks';
 import { BsFillPlayFill } from 'react-icons/bs';
+import { GrEdit } from 'react-icons/gr';
 import { getSong } from '../../../lib/firebase';
 import { StateContext } from '../../app';
 import MetronomeIcon from './MetronomeIcon';
@@ -18,8 +20,13 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
   
   const context = useContext(StateContext)
   const [bpm, setBpm] = useState(song.bpm)
+  const [edit, setEdit] = useState<boolean>(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [metronomeOpen, setMetronomeOpen] = useState(false)
+
+  const goToEdit = () => {
+    route(`/music/edit?id=${song.id}&title=${song.title}&bpm=${song.bpm}&length=${song.length}&time_signature=${song.time_signature}&audio_path=${song.audio_path}`)
+  }
 
   useEffect(() => {
     if (firstUpdate.current) {
@@ -34,8 +41,11 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
   }, [isPlaying])
 
   return (
-    <div class='flex flex-col items-center gap-3 px-6 py-2 shadow-lg w-full rounded-lg'>
+    <div class={`flex flex-col items-center gap-3 px-6 py-2 w-full rounded-lg border-2 relative`}>
       <h4 class="font-bold">{song.title}</h4>
+      <div onClick={goToEdit} className={`absolute right-4 top-3 icon`}>
+        <GrEdit />
+      </div>
       <div className="flex items-center justify-between space-x-3 h-full w-full">
         <div className="w-4/5">
           <p><span class="font-semibold">{song.bpm}</span> bpm（{song.time_signature}）</p>
@@ -50,7 +60,7 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
         {metronomeOpen && <PlayBox setter={setMetronomeOpen} bpm={bpm} />}
       </div>
       {isPlaying && (
-        <figure class='m-0 absolute bottom-12 left-1/2 transform -translate-x-1/2'>
+        <figure class='m-0 fixed bottom-16 left-1/2 transform -translate-x-1/2'>
           <audio controls autoPlay ref={audioRef} src="" />
         </figure>
       )}

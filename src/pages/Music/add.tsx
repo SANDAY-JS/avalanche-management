@@ -34,6 +34,7 @@ const AddMusic = ({path}: Props) => {
         length: length,
         time_signature: time_signature,
         audio_path: String(audio?.name),
+        id: String(Date.now())
     }
     await uploadSongData(songData);
     await uploadSongFile(audio as File, toast, loadingPercentage, setLoadingPercentage, onComplete);

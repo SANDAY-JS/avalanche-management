@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
-import { getDocs, addDoc, collection, doc, getFirestore, deleteDoc } from 'firebase/firestore'
+import { getDocs, addDoc, collection, doc, getFirestore, deleteDoc, query, where } from 'firebase/firestore'
 import { ToastType } from "../src/types/global";
 
 const firebaseConfig = {
@@ -86,16 +86,24 @@ const getSongData = async (setter: Function) => {
   }
 }
 
-const deleteSongData = async (docName: string, onComplete?: Function) => {
+const deleteSongData = async (docId: string, onComplete?: Function) => {
   try {
-    await deleteDoc(doc(db, "songs", docName));
+    const q = query(collection(db, 'songs'), where("id", "==", docId))
+    const querySnapshot = await getDocs(q);
+    const id = querySnapshot.docs.map((doc:any) => doc.id)[0];
+    // const audioPath = querySnapshot.docs.map((doc:any) => doc.data())[0].audio_path;
+
+    await deleteDoc(doc(db, "songs", id))
+      .then(() => {
+        console.log('deleted!')
+        if(onComplete) {
+          onComplete();
+        }
+      });
   } catch (error) {
     console.error(error);
-    if(onComplete) {
-      onComplete();
-    }
   }
 }
 
 
-export { app, storage, ref, getDownloadURL, getSong, uploadSongFile, uploadSongData, getSongData };
+export { app, storage, ref, getDownloadURL, getSong, uploadSongFile, uploadSongData, getSongData, deleteSongData };

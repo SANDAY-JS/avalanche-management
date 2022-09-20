@@ -1,6 +1,6 @@
 import { Link } from "preact-router"
 import { useContext, useState } from "preact/hooks"
-import { GrAdd } from 'react-icons/gr'
+import { GrAdd, GrEdit } from 'react-icons/gr'
 import Song from "../../components/Music/SongList"
 import {StateContext} from '../../app';
 // import SearchSong from "../../components/Music/SearchSong"
@@ -18,11 +18,13 @@ function Music({path}: Props) {
       <div className="flex gap-3 justify-between items-center w-full">
         <h2 class="text-lg underline text-left italic">Song List</h2>
         {/* <SearchSong /> */}
-        <Link href="/music/add">
-          <a onClick={() => {}}>
-            <GrAdd />
-          </a>
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link href="/music/add">
+            <a className={`${context.dark && '!fill-[#fafafa]'}`}>
+              <GrAdd />
+            </a>
+          </Link>
+        </div>
       </div>
 
       <div className="flex-1 w-full flex flex-col items-center gap-4">
