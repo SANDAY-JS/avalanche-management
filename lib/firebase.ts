@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {getStorage, ref, getDownloadURL} from 'firebase/storage'
+import {getStorage, ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage'
 import {getDocs, addDoc, collection, getFirestore} from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -25,25 +25,51 @@ const getSong = (path: string, audioEl: HTMLElement) => {
       });
 }
 
-const uploadSongFile = () => {
+const uploadSongFile = async (file: File, toast: Function) => {
+  if(!file) {
+    alert('オーディオファイルを選択してください');
+    return;
+  }
 
+  try {
+    const storageRef = ref(storage, `/songs/${file.name}`)
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+          const percent = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          console.log(percent)
+      },
+      (err) => console.error(err),
+      () => {
+          // download url
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+              console.log('Uploaded a song file as >>', url);
+              toast('新しい曲を追加しました！');
+          });
+      }
+  ); 
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 const uploadSongData = async (data: Song) => {
   try {
+    console.log('data>>', data);
     const docRef = await addDoc(collection(db, 'songs'), data);
-    console.log(docRef.id)
+    console.log('song data has uploaded', docRef.id)
   } catch (error) {
     console.error(error);
   }
 }
 
 const getSongData = async (setter: Function) => {
-  const result: any[] = []
   try {
     await getDocs(collection(db, 'songs')).then((querySnapshot) => {
-      querySnapshot.docs.forEach((doc) => result.push(doc.data()))
-      setter(result)
+      setter(querySnapshot.docs.map((doc) => doc.data()))
     });
   } catch (error) {
     console.error(error);

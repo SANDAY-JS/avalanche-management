@@ -8,8 +8,8 @@ import PlayBox from './PlayBox';
 type Props = {
   song: Song
   id: number
-  currentSong: number | undefined
-  setCurrentSong: Function
+  currentSong?: number | undefined
+  setCurrentSong?: Function
 }
 
 function Song({song, id, currentSong, setCurrentSong}: Props) {
@@ -28,14 +28,14 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
     }
 
     if(isPlaying && audioRef.current) {
-      getSong(song.audio, audioRef.current)
+      getSong(song.audio_path, audioRef.current)
       return;
     }
   }, [isPlaying])
 
   return (
     <div class='flex flex-col items-center gap-3 px-6 py-2 shadow-lg w-full rounded-lg'>
-      <h4 class="font-bold">{song.name}</h4>
+      <h4 class="font-bold">{song.title}</h4>
       <div className="flex items-center justify-between space-x-3 h-full w-full">
         <div className="w-4/5">
           <p><span class="font-semibold">{song.bpm}</span> bpm（{song.time_signature}）</p>
