@@ -26,7 +26,7 @@ function Music({path}: Props) {
       </div>
 
       <div className="flex-1 w-full flex flex-col items-center gap-4">
-        {context?.testData?.map((song, i) => (
+        {context?.songs?.map((song, i) => (
           <Song song={song} id={i} currentSong={currentSong} setCurrentSong={setCurrentSong} key={i} />
         ))}
       </div>

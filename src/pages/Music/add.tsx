@@ -1,8 +1,9 @@
 import { useContext, useState } from "preact/hooks"
 import { uploadSongData, uploadSongFile } from "../../../lib/firebase"
-import { StateContext } from "../../app"
+// import { StateContext } from "../../app"
 import { TimeSignatureType } from "../../types/global"
 import toast from 'react-hot-toast';
+import { route } from "preact-router";
 // import Song from "../../components/Music/SongList"
 
 type Props = {
@@ -10,17 +11,23 @@ type Props = {
 }
 
 const AddMusic = ({path}: Props) => {
-  const context = useContext(StateContext)
+//   const context = useContext(StateContext)
   const [title, setTitle] = useState('')
   const [bpm, setBpm] = useState<number>(80)
   const [length, setLength] = useState(4)
   const [time_signature, setTime_signature] = useState<TimeSignatureType>('4/4')
   const [audio, setAudio] = useState<File>()
   const isReady = title.length > 0 && bpm && length > 0 && time_signature && audio;
+  const [loadingPercentage, setLoadingPercentage] = useState<number>(0);
+  const [loading, setLoading] = useState(false)
+
+  const onComplete = () => {
+    route('/music')
+  }
 
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
-    console.log(audio?.name)
+    setLoading(true)
     const songData: Song = {
         title: title,
         bpm: bpm,
@@ -29,7 +36,7 @@ const AddMusic = ({path}: Props) => {
         audio_path: String(audio?.name),
     }
     await uploadSongData(songData);
-    await uploadSongFile(audio as File, toast.success)
+    await uploadSongFile(audio as File, toast, loadingPercentage, setLoadingPercentage, onComplete);
   }
 
   const handleAudioFile = (e: any) => {
@@ -75,9 +82,10 @@ const AddMusic = ({path}: Props) => {
                         type="file" 
                         name="audio" 
                         id="audio" 
+                        accept=".mp3,.wav"
                     />
                 </label>
-                <button disabled={!isReady} type="submit" className={`border border-black w-fit rounded-md mx-auto py-1 mt-4 ${!isReady && "text-gray-400 border-gray-400"}`}>追加</button>
+                <button disabled={!isReady || loading} type="submit" className={`border border-black w-fit rounded-md mx-auto py-1 mt-4 ${!isReady && "text-gray-400 border-gray-400"}`}>追加</button>
             </form>
         </div>
 

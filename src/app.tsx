@@ -14,14 +14,10 @@ import AddMusic from './pages/Music/add';
 type ContextType = {
   dark: boolean;
   setDark: Function;
-  testData?: Song[];
+  songs?: Song[];
+  setSongs?: Function;
 }
 export const StateContext =  createContext<ContextType>({dark: false, setDark: () => {}});
-
-const testData: Song[] = [
-  {title: 'さがしもの', bpm: 80, time_signature: '4/4', length: 4.5, audio_path: 'Holiday.mp3'},
-  {title: 'Hero', bpm: 148, time_signature: '2/2', length: 4, audio_path: 'Holiday.mp3'},
-]
 
 export function App() {
   const [songs, setSongs] = useState<Song[]>([])
@@ -30,7 +26,7 @@ export function App() {
     return true;
   }
 
-  const sharedValue = {dark, setDark, songs, setSongs, testData}
+  const sharedValue = {dark, setDark, songs, setSongs}
 
   const handleRoute = (e: any) => {
     switch (e.url) {
@@ -57,7 +53,7 @@ export function App() {
   return (
     <StateContext.Provider value={sharedValue}>
       <Header />
-      <Toaster />
+      <Toaster position="bottom-center" reverseOrder={false} />
         <Router onChange={handleRoute}>
           <Profile path="/" />
           <Music path="/music" />
