@@ -1,6 +1,6 @@
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { BsTrash } from "react-icons/bs";
-import { deleteSongData } from "../../../lib/firebase";
+import { deleteSongData, getSongDataById } from "../../../lib/firebase";
 import toast from 'react-hot-toast'
 import { route } from "preact-router";
 
@@ -21,12 +21,13 @@ const EditSong = ({path}: Props) => {
       return acc;
     }, {} as QueryString);
 
+  const [data, setData] = useState<Song>();
   const [id, _] = useState(query?.id)
-  const [title, setTitle] = useState(query?.title)
-  const [bpm, setBpm] = useState(query?.bpm)
-  const [length, setLength] = useState(query?.length)
-  const [time_signature, setTimeSignature] = useState(query?.time_signature)
-  const [audioPath, setAudioPath] = useState(query?.audio_path)
+  const [title, setTitle] = useState('')
+  const [bpm, setBpm] = useState<number>(parseInt(query?.bpm))
+  const [length, setLength] = useState<number>(parseInt(query?.length))
+  const [time_signature, setTimeSignature] = useState('')
+  const [audioPath, setAudioPath] = useState('')
 
   const handleDelete = async () => {
     if(!confirm(title+'を削除しますか？')) return;
@@ -37,6 +38,21 @@ const EditSong = ({path}: Props) => {
     toast.success('削除が完了しました！')
     route('/music')
   }
+
+  const fetchSong = async (): Promise<void> => await getSongDataById(id, setData);
+
+  useEffect(() => {
+    fetchSong();
+  }, [])
+
+  useEffect(() => {
+    if(!data) return;
+    setTitle(data.title)
+    setBpm(data.bpm)
+    setLength(data.length)
+    setAudioPath(data.audio_path)
+    setTimeSignature(data.time_signature)
+  }, [data])
 
   return (
     <div className="flex flex-col items-center gap-10 w-full pt-5">

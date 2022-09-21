@@ -86,6 +86,17 @@ const getSongData = async (setter: Function) => {
   }
 }
 
+const getSongDataById = async (docId: string, setter: Function): Promise<void> => {
+  try {
+    const q = query(collection(db, 'songs'), where("id", "==", docId))
+    const querySnapshot = await getDocs(q);
+    const theSong: Song = querySnapshot.docs.map((doc:any) => doc.data())[0];
+    setter(theSong);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 const deleteSongData = async (docId: string, onComplete?: Function) => {
   try {
     const q = query(collection(db, 'songs'), where("id", "==", docId))
@@ -115,4 +126,4 @@ const deleteSongData = async (docId: string, onComplete?: Function) => {
 }
 
 
-export { app, storage, ref, getDownloadURL, getSong, uploadSongFile, uploadSongData, getSongData, deleteSongData };
+export { app, storage, ref, getDownloadURL, getSong, uploadSongFile, uploadSongData, getSongData, deleteSongData, getSongDataById };
