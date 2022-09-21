@@ -3,6 +3,7 @@ import { BsTrash } from "react-icons/bs";
 import { deleteSongData, getSongDataById } from "../../../lib/firebase";
 import toast from 'react-hot-toast'
 import { route } from "preact-router";
+import { FiEdit } from "react-icons/fi";
 
 interface QueryString {
   [key: string]: string;
@@ -28,6 +29,7 @@ const EditSong = ({path}: Props) => {
   const [length, setLength] = useState<number>(parseInt(query?.length))
   const [time_signature, setTimeSignature] = useState('')
   const [audioPath, setAudioPath] = useState('')
+  const [isEditting, setIsEditting] = useState(false);
 
   const handleDelete = async () => {
     if(!confirm(title+'を削除しますか？')) return;
@@ -56,22 +58,52 @@ const EditSong = ({path}: Props) => {
 
   return (
     <div className="flex flex-col items-center gap-10 w-full pt-5">
-      <h2>{title} を編集</h2>
-      <div className="flex flex-col items-start gap-2 w-3/4 py-3 px-10 rounded-md border mx-auto">
-        <h3 className="font-bold text-center w-full">{title}</h3>
-        <p><span class="font-semibold">{bpm}</span> bpm（{time_signature}）</p>
-        <p>{length} 分</p>
-        <div className="flex justify-between w-full">
-          <span>ファイル</span>
-          <p>{audioPath}</p>
+      <div className="flex items-center gap-5">
+        <div onClick={() => setIsEditting(!isEditting)} className="text-green-500 text-2xl flex flex-col items-center">
+          <FiEdit />
+          <span className="text-black text-xs">編集</span>
+        </div>
+        <div onClick={handleDelete} className="text-red-500 text-2xl flex flex-col items-center">
+          <BsTrash />
+          <span className="text-black text-xs">削除</span>
         </div>
       </div>
 
-      <div className="flex items-center gap-5">
-        削除する
-        <div onClick={handleDelete} className="text-red-500 text-2xl">
-          <BsTrash />
-        </div>
+      <div className="flex flex-col items-start space-y-2 w-3/4 py-3 px-10 rounded-md border mx-auto">
+        {!isEditting ? 
+          <h3 className="font-bold text-center w-full">{title}</h3> :
+          <label htmlFor="title" className="w-full flex items-center" >
+            タイトル
+            <input onChange={e => setTitle(e.currentTarget.value)} type="text" name="title" value={title} className="ml-auto w-1/2 pl-2" />
+          </label>
+        }
+        {!isEditting ? 
+          <p><span class="font-semibold">{bpm}</span> bpm（{time_signature}）</p> 
+            :
+          <div className="flex flex-col">
+            <label htmlFor="bpm" className="w-full flex mb-2" >
+              bpm 
+              <input onChange={e=>setBpm(e.currentTarget.valueAsNumber)} type="number" name="bpm" id="bpm" value={bpm} className="ml-auto w-1/2 pl-2" />
+            </label>
+            <label htmlFor="time_signature" className="w-full flex items-center" >
+              拍子 
+              <input onChange={e=>setTimeSignature(e.currentTarget.value)} type="number" name="time_signature" id="time_signature" value={time_signature} className="ml-auto w-1/2 pl-2" />
+            </label>
+          </div>
+        }
+        {!isEditting ? <p>{length} 分</p> : 
+         <label htmlFor="length" className="w-full flex items-center" >
+            曲の長さ
+            <input onChange={e=>setLength(e.currentTarget.valueAsNumber)} type="number" name="length" id="length" value={length} className="ml-auto w-1/2 pl-2" />
+         </label>
+        }
+        {!isEditting ? 
+          <div className="flex justify-between w-full">
+            <span>ファイル</span>
+            <p>{audioPath}</p>
+          </div> :
+          <input type="file" accept="mp3" />
+        }
       </div>
     </div>
   )

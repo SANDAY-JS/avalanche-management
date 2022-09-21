@@ -20,7 +20,6 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
   
   const context = useContext(StateContext)
   const [bpm, setBpm] = useState(song.bpm)
-  const [edit, setEdit] = useState<boolean>(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [metronomeOpen, setMetronomeOpen] = useState(false)
 
