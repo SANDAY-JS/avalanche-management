@@ -12,4 +12,12 @@ declare global {
         audio_path: string;
         id: string;
     }
+    type SongWithId = {
+        title?: string;
+        bpm?: number;
+        time_signature?: TimeSignatureType;
+        length?: number;
+        audio_path?: string;
+        id: string;
+    }
 }
