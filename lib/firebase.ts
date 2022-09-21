@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL, uploadBytesResumable, deleteObject } from 'firebase/storage'
-import { getDocs, addDoc, collection, doc, getFirestore, deleteDoc, query, where } from 'firebase/firestore'
+import { getDocs, addDoc, collection, doc, getFirestore, deleteDoc, query, where, updateDoc } from 'firebase/firestore'
 import { ToastType } from "../src/types/global";
 
 const firebaseConfig = {
@@ -86,6 +86,77 @@ const getSongData = async (setter: Function) => {
   }
 }
 
+const getSongId = async (id: string): Promise<void | string> => {
+  try {
+    const q = query(collection(db, 'songs'), where("id", "==", id))
+    const querySnapshot = await getDocs(q);
+    const theId = querySnapshot.docs.map((doc:any) => doc.id)[0];
+    return theId
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const getSongDataById = async (docId: string, setter?: Function): Promise<void | Song> => {
+  try {
+    const q = query(collection(db, 'songs'), where("id", "==", docId))
+    const querySnapshot = await getDocs(q);
+    const theSong: Song = querySnapshot.docs.map((doc:any) => doc.data())[0];
+    if(setter){
+      setter(theSong);
+    } else {
+      return theSong as Song;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const editSongData = async (newData: SongWithId): Promise<void> => {
+  try {
+    const songId = await getSongId(newData.id);
+    if(!songId) throw new Error();
+
+    const songRef = doc(db, "songs", songId);
+    await updateDoc(songRef, newData)
+    .then(() => console.log('done!'))
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const updateSongFile = async (file: File, audioPath: string) => {
+  try {
+    // Delete Origin File
+    const desertRef = ref(storage, `songs/${audioPath}`);
+    await deleteObject(desertRef)
+      .then(() => {
+        console.log('deleted a file')
+      })
+  
+    // Add New File
+    const storageRef = ref(storage, `songs/${file.name}`)
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        console.log(percent)
+      },
+      (err) => console.log(err),
+      () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+              console.log(url);
+          });
+      }
+    ); 
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 const deleteSongData = async (docId: string, onComplete?: Function) => {
   try {
     const q = query(collection(db, 'songs'), where("id", "==", docId))
@@ -115,4 +186,4 @@ const deleteSongData = async (docId: string, onComplete?: Function) => {
 }
 
 
-export { app, storage, ref, getDownloadURL, getSong, uploadSongFile, uploadSongData, getSongData, deleteSongData };
+export { app, storage, ref, getDownloadURL, getSong, uploadSongFile, uploadSongData, getSongData, editSongData, deleteSongData, getSongDataById, updateSongFile };

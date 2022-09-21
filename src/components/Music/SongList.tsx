@@ -20,12 +20,11 @@ function Song({song, id, currentSong, setCurrentSong}: Props) {
   
   const context = useContext(StateContext)
   const [bpm, setBpm] = useState(song.bpm)
-  const [edit, setEdit] = useState<boolean>(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [metronomeOpen, setMetronomeOpen] = useState(false)
 
   const goToEdit = () => {
-    route(`/music/edit?id=${song.id}&title=${song.title}&bpm=${song.bpm}&length=${song.length}&time_signature=${song.time_signature}&audio_path=${song.audio_path}`)
+    route(`/music/edit?id=${song.id}&bpm=${song.bpm}&length=${song.length}`)
   }
 
   useEffect(() => {
