@@ -1,10 +1,11 @@
 import { route,  } from 'preact-router';
 import { useContext, useEffect, useRef, useState } from 'preact/hooks';
-import { BsFillPauseFill, BsFillPlayFill } from 'react-icons/bs';
+import { BsFillPlayFill } from 'react-icons/bs';
 import { GrEdit } from 'react-icons/gr';
 import { StateContext } from '../../app';
 import MetronomeIcon from './MetronomeIcon';
 import PlayBox from './PlayBox';
+import styles from '../../modules/animation.module.css';
 
 type Props = {
   song: Song
@@ -32,9 +33,8 @@ function Song({song, id}: Props) {
       return;
     }
 
-    if(isPlaying) {
-      setCurrentSong(song.audio_path);
-    }
+    if(!isPlaying) return;
+    setCurrentSong(song.audio_path);
   }, [isPlaying])
 
   return (
@@ -49,7 +49,7 @@ function Song({song, id}: Props) {
           <p>{song.length} 分</p>
         </div>
         <div onClick={() => setIsPlaying(!isPlaying)} className={`relative text-3xl ${dark && 'fill-[#fafafa]'} ${currentSong === song.audio_path && 'text-theme'}`}>
-          {currentSong === song.audio_path && isPlaying ? <BsFillPauseFill /> : <BsFillPlayFill />}
+          {currentSong === song.audio_path ? <div className={styles.dotCarousel} /> : <BsFillPlayFill />}
         </div>
         <div onClick={() => setMetronomeOpen(!metronomeOpen)} className={`relative w-7 h-7 ${dark && 'fill-[#fafafa]'} ${metronomeOpen && 'fill-theme'}`}>
           <MetronomeIcon />
