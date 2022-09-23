@@ -37,6 +37,7 @@ const EditSong = ({path}: Props) => {
 
   const handleAudioFile = (e: any) => {
     setAudio(e.currentTarget?.files[0])
+    setAudioPath(e.currentTarget?.files[0]?.name)
   }
 
   const handleDelete = async () => {
@@ -63,6 +64,7 @@ const EditSong = ({path}: Props) => {
       }
     }
     newData.id = id;
+    if(audio) newData.audio_path = audioPath;
     return newData;
   }
 
@@ -81,10 +83,8 @@ const EditSong = ({path}: Props) => {
     const updatedData = compareOriginNew(newData)
 
     if(audio) {
-      await updateSongFile(audio, audioPath);
-    }
-    
-    await editSongData(updatedData)
+      await editSongData(updatedData);
+      await updateSongFile(audio, data?.audio_path as string)
       .then(() => {
         toast.dismiss(loadingId)
         toast.success(`${title}の情報を更新しました!`)
@@ -96,6 +96,20 @@ const EditSong = ({path}: Props) => {
         toast.error('更新に失敗しました...')
         setLoading(false);
       });
+    } else {
+      await editSongData(updatedData)
+      .then(() => {
+        toast.dismiss(loadingId)
+        toast.success(`${title}の情報を更新しました!`)
+        setLoading(false);
+        route('/music')
+      })
+      .catch((err) => {
+        toast.dismiss(loadingId)
+        toast.error('更新に失敗しました...')
+        setLoading(false);
+      });
+    }
   }
 
   useEffect(() => {
