@@ -10,7 +10,7 @@ type Props = {
 }
 
 function Music({path}: Props) {
-  const context = useContext(StateContext)
+  const { songs } = useContext(StateContext)
   const [currentSong, setCurrentSong] = useState<number>()
 
   return (
@@ -28,7 +28,7 @@ function Music({path}: Props) {
       </div>
 
       <div className="flex-1 w-full flex flex-col items-center gap-4">
-        {context?.songs?.map((song, i) => (
+        {songs?.map((song: Song, i: number) => (
           <Song song={song} id={i} currentSong={currentSong} setCurrentSong={setCurrentSong} key={i} />
         ))}
       </div>

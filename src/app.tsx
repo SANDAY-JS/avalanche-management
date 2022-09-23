@@ -7,27 +7,33 @@ import Header from './components/Header'
 import MenuBar from './components/MenuBar'
 import { createContext } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import { getSongData } from '../lib/firebase';
-import { Toaster } from 'react-hot-toast';
+import { getSong, getSongData } from '../lib/firebase';
+import { toast, Toaster } from 'react-hot-toast';
 import AddMusic from './pages/Music/add';
 import EditSong from './components/Music/edit';
+import PlayMusic from './components/Music/PlayMusic';
 
 type ContextType = {
   dark: boolean;
   setDark: Function;
-  songs?: Song[];
-  setSongs?: Function;
+  songs: Song[];
+  setSongs: Function;
+  currentSong: string;
+  setCurrentSong: Function;
 }
-export const StateContext =  createContext<ContextType>({dark: false, setDark: () => {}});
+export const StateContext = createContext<any>(null);
+// export const StateContext =  createContext({dark: false, setDark: () => {}});
 
 export function App() {
+  const [currentSong, setCurrentSong] = useState<string>('')
+  const [currentSongAsUrl, setCurrentSongAsUrl] = useState<string>('')
   const [songs, setSongs] = useState<Song[]>([])
   const [dark, setDark] = useState(false)
   const isAuthenticated = () =>{
     return true;
   }
 
-  const sharedValue = {dark, setDark, songs, setSongs}
+  const sharedValue: ContextType = {dark, setDark, songs, setSongs, currentSong, setCurrentSong}
 
   const handleRoute = (e: any) => {
     switch (e.url) {
@@ -38,7 +44,10 @@ export function App() {
     }
   };
 
-  
+  const getCurrentSongUrl = async () => {
+    await getSong(currentSong, setCurrentSongAsUrl).catch(() => toast.error('曲を取得できませんでした'))
+  }
+
   useEffect(() => {
     getSongData(setSongs);
 
@@ -47,9 +56,9 @@ export function App() {
   }, [])
 
   useEffect(() => {
-    console.log(songs)
-  }, [songs])
-
+    if(!currentSong) return;
+    getCurrentSongUrl()
+  }, [currentSong])
 
   return (
     <StateContext.Provider value={sharedValue}>
@@ -62,6 +71,7 @@ export function App() {
           <EditSong path="/music/edit" />
           <Calendar path="/calendar" />
         </Router>
+      {currentSongAsUrl && <PlayMusic currentSongAsUrl={currentSongAsUrl} />}
       <MenuBar />
     </StateContext.Provider>
   )

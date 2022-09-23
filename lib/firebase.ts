@@ -16,14 +16,15 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage(app)
 const db = getFirestore(app);
 
-const getSong = (path: string, audioEl: HTMLElement) => {
+const getSong = async (path: string, setter: Function): Promise<string | void> => {
   // Play Song
-  getDownloadURL(ref(storage, `songs/${path}`))
+  await getDownloadURL(ref(storage, `songs/${path}`))
       .then((url) => {
-          audioEl.setAttribute('src', url);
+        setter(url);
       })
       .catch((error) => {
-          console.error(error);
+        console.error(error);
+        throw Error()
       });
 }
 
