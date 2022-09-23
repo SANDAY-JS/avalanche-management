@@ -128,30 +128,30 @@ const editSongData = async (newData: SongWithId): Promise<void> => {
 const updateSongFile = async (file: File, audioPath: string) => {
   try {
     // Delete Origin File
+    console.log(audioPath)
     const desertRef = ref(storage, `songs/${audioPath}`);
     await deleteObject(desertRef)
       .then(() => {
         console.log('deleted a file')
-      })
-  
-    // Add New File
-    const storageRef = ref(storage, `songs/${file.name}`)
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const percent = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        // Add New File
+        const storageRef = ref(storage, `songs/${file.name}`)
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const percent = Math.round(
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            console.log(percent)
+          },
+          (err) => console.log(err),
+          () => {
+              getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                  console.log(url);
+              });
+          }
         );
-        console.log(percent)
-      },
-      (err) => console.log(err),
-      () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-              console.log(url);
-          });
-      }
-    ); 
+      }).catch((err) => console.error(err))
   } catch (error) {
     console.error(error);
   }
@@ -161,24 +161,22 @@ const deleteSongData = async (docId: string, onComplete?: Function) => {
   try {
     const q = query(collection(db, 'songs'), where("id", "==", docId))
     const querySnapshot = await getDocs(q);
-    const id = querySnapshot.docs.map((doc:any) => doc.id)[0];
+    const id = querySnapshot.docs.map((doc:SongWithId) => doc.id)[0];
+    await deleteDoc(doc(db, "songs", id))
+    .then(() => {
+      console.log('deleted!')
+      if(onComplete) {
+        onComplete();
+      }
+    });
     
     const audioPath = querySnapshot.docs.map((doc:any) => doc.data())[0].audio_path;
     const desertRef = ref(storage, `songs/${audioPath}`);
-
     await deleteObject(desertRef)
       .then(() => {
         console.log('deleted a file')
       }).catch((error) => {
         console.error(`cannot remove a file ${audioPath}`, error);
-      });
-
-    await deleteDoc(doc(db, "songs", id))
-      .then(() => {
-        console.log('deleted!')
-        if(onComplete) {
-          onComplete();
-        }
       });
   } catch (error) {
     console.error(error);
