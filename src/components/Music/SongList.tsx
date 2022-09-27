@@ -51,9 +51,9 @@ function Song({song, id}: Props) {
         <div onClick={() => setIsPlaying(!isPlaying)} className={`relative text-3xl ${dark && 'fill-[#fafafa]'} ${currentSong === song.audio_path && 'text-theme'}`}>
           {currentSong === song.audio_path ? <div className={styles.dotCarousel} /> : <BsFillPlayFill />}
         </div>
-        <div onClick={() => setMetronomeOpen(!metronomeOpen)} className={`relative w-7 h-7 ${dark && 'fill-[#fafafa]'} ${metronomeOpen && 'fill-theme'}`}>
+        {/* <div onClick={() => setMetronomeOpen(!metronomeOpen)} className={`relative w-7 h-7 ${dark && 'fill-[#fafafa]'} ${metronomeOpen && 'fill-theme'}`}>
           <MetronomeIcon />
-        </div>
+        </div> */}
         {metronomeOpen && <PlayBox setter={setMetronomeOpen} bpm={bpm} />}
       </div>
     </div>
