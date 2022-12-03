@@ -21,7 +21,7 @@ function Music({path}: Props) {
         <div className="flex items-center gap-4">
           <Link href="/music/add">
             <a className={`icon`}>
-              <GrAdd />
+              <GrAdd className="dark:fill-white" />
             </a>
           </Link>
         </div>

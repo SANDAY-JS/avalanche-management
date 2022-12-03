@@ -12,6 +12,7 @@ import { toast, Toaster } from 'react-hot-toast';
 import AddMusic from './pages/Music/add';
 import EditSong from './components/Music/edit';
 import PlayMusic from './components/Music/PlayMusic';
+import Layout from './components/ui/Layout';
 
 type ContextType = {
   dark: boolean;
@@ -64,6 +65,7 @@ export function App() {
     <StateContext.Provider value={sharedValue}>
       <Header />
       <Toaster position="bottom-center" reverseOrder={false} />
+      <Layout>
         <Router onChange={handleRoute}>
           <Profile path="/" />
           <Music path="/music" />
@@ -71,6 +73,7 @@ export function App() {
           <EditSong path="/music/edit" />
           <Calendar path="/calendar" />
         </Router>
+      </Layout>
       {currentSongAsUrl && <PlayMusic currentSongAsUrl={currentSongAsUrl} />}
       <MenuBar />
     </StateContext.Provider>
