@@ -1,5 +1,5 @@
 import './app.css'
-import Router, { route } from 'preact-router'
+import { Router, Route, route } from 'preact-router'
 import Calendar from './pages/Calendar';
 import Profile from './pages/Profile';
 import Music from './pages/Music';
@@ -12,6 +12,7 @@ import { toast, Toaster } from 'react-hot-toast';
 import AddMusic from './pages/Music/add';
 import EditSong from './components/Music/edit';
 import PlayMusic from './components/Music/PlayMusic';
+import Layout from './components/ui/Layout';
 
 type ContextType = {
   dark: boolean;
@@ -64,13 +65,15 @@ export function App() {
     <StateContext.Provider value={sharedValue}>
       <Header />
       <Toaster position="bottom-center" reverseOrder={false} />
+      <Layout>
         <Router onChange={handleRoute}>
-          <Profile path="/" />
-          <Music path="/music" />
-          <AddMusic path="/music/add" />
-          <EditSong path="/music/edit" />
-          <Calendar path="/calendar" />
+          <Route path='/' component={Profile} />
+          <Route path='/music' component={Music} />
+          <Route path='/music/add' component={AddMusic} />
+          <Route path='/music/edit' component={EditSong} />
+          <Route path='/calendar' component={Calendar} />
         </Router>
+      </Layout>
       {currentSongAsUrl && <PlayMusic currentSongAsUrl={currentSongAsUrl} />}
       <MenuBar />
     </StateContext.Provider>
