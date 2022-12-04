@@ -1,5 +1,5 @@
 import './app.css'
-import Router, { route } from 'preact-router'
+import { Router, Route, route } from 'preact-router'
 import Calendar from './pages/Calendar';
 import Profile from './pages/Profile';
 import Music from './pages/Music';
@@ -67,11 +67,11 @@ export function App() {
       <Toaster position="bottom-center" reverseOrder={false} />
       <Layout>
         <Router onChange={handleRoute}>
-          <Profile path="/" />
-          <Music path="/music" />
-          <AddMusic path="/music/add" />
-          <EditSong path="/music/edit" />
-          <Calendar path="/calendar" />
+          <Route path='/' component={Profile} />
+          <Route path='/music' component={Music} />
+          <Route path='/music/add' component={AddMusic} />
+          <Route path='/music/edit' component={EditSong} />
+          <Route path='/calendar' component={Calendar} />
         </Router>
       </Layout>
       {currentSongAsUrl && <PlayMusic currentSongAsUrl={currentSongAsUrl} />}
